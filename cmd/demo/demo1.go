@@ -36,10 +36,12 @@ func main() {
 	// client := aio.NewClient(os.Getenv("ADAFRUIT_IO_KEY"))
 	// ShowAll(client)
 
-	bme680 := drv.NewBME680(drv.PRIMARY)
-	// Make a new channel which will be used to ensure we get all output
+	drv.GpioOpen()
+
 	dataChannel := make(chan interface{})
-	bme680.Start(dataChannel)
+	// bme680 := drv.NewBME680(drv.PRIMARY)
+	// bme680.Start(dataChannel)
+	// Make a new channel which will be used to ensure we get all output
 
 	bme680S := drv.NewBME680(drv.SECONDARY)
 	bme680S.Start(dataChannel)
@@ -57,14 +59,11 @@ func main() {
 		syscall.SIGTERM,
 		syscall.SIGQUIT)
 
-	//go func() {
 	s := <-sigc
 	fmt.Println(s)
 
-	bme680.Stop()
-	// ... do something ...
-
-	//}()
+	bme680S.Stop()
+	drv.GpioClose()
 
 	log.Println("Stopping main")
 
