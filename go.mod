@@ -8,4 +8,5 @@ require (
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/stianeikeland/go-rpio/v4 v4.6.0
 	github.com/stretchr/testify v1.7.0 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )

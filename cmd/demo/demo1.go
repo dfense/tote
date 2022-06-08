@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -11,6 +12,7 @@ import (
 	aio "github.com/adafruit/io-client-go"
 	"github.com/dfense/demo1/drv"
 	"github.com/dfense/demo1/net"
+	"github.com/dfense/demo1/settings"
 )
 
 func render(label string, f *aio.Feed) {
@@ -35,6 +37,13 @@ func ShowAll(client *aio.Client) {
 func main() {
 	// client := aio.NewClient(os.Getenv("ADAFRUIT_IO_KEY"))
 	// ShowAll(client)
+	configFile := flag.String("configfile", "/boot/settings.yaml", "full path and file name to config file")
+	log.Println(configFile)
+	flag.Parse()
+	config, err := settings.GetConfigFromFile(*configFile)
+	if err != nil {
+		log.Fatalf("config file read error : %s", err)
+	}
 
 	drv.GpioOpen()
 
@@ -48,8 +57,11 @@ func main() {
 
 	log.Println("bme started, now connecting to adafruit")
 
+	// network mqtt agent connection to cloud
 	client := net.Client{}
-	client.Connect()
+
+	// never returns if no connection.. !!
+	client.Connect(*config)
 	go client.Listen(dataChannel)
 
 	sigc := make(chan os.Signal, 1)

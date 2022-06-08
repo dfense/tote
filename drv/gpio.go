@@ -54,6 +54,21 @@ func LightEnable(onOff bool) {
 	}
 }
 
+// called when hotspot interface is alive and able to take conn
+func HotSpot(enabled bool) {
+
+}
+
+// callled when internet service is detected
+func Skynet(enabled bool) {
+
+}
+
+// called immediate on startup
+func Booting() {
+
+}
+
 // turn fan off, turn light off
 func GpioClose() {
 
